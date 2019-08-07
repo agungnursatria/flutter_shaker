@@ -30,7 +30,6 @@ open class ShakeListener(mContext: Context) : SensorEventListener {
         mSensorMgr?.let {
             accSensor = it.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
             magnetSensor = it.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)
-            resume()
         } ?: throw UnsupportedOperationException("Sensors not supported")
     }
 
