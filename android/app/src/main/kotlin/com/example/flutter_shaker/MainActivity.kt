@@ -8,8 +8,8 @@ import io.flutter.plugins.GeneratedPluginRegistrant
 
 class MainActivity: FlutterActivity(), ShakeListener.OnShakeListener {
 
-  override fun onShake(count: Int) {
-    Log.d("MainActivity", count.toString())
+  override fun onShake() {
+    Log.d("MainActivity", "Shake shake shake!")
   }
 
   lateinit var shakeListener: ShakeListener

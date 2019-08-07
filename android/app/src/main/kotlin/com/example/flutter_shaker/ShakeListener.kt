@@ -5,7 +5,6 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
-import android.util.Log
 
 
 open class ShakeListener(mContext: Context) : SensorEventListener {
@@ -16,6 +15,7 @@ open class ShakeListener(mContext: Context) : SensorEventListener {
     private var mListener: OnShakeListener? = null
     private var mShakeTimestamp: Long = 0
     private var mShakeCount: Int = 0
+    private val shakeToStartAction = 5
 
     private var mSensorMgr: SensorManager? = null
     var accSensor: Sensor? = null
@@ -38,7 +38,7 @@ open class ShakeListener(mContext: Context) : SensorEventListener {
     }
 
     interface OnShakeListener {
-        fun onShake(count: Int)
+        fun onShake()
     }
 
     fun resume() {
@@ -55,7 +55,7 @@ open class ShakeListener(mContext: Context) : SensorEventListener {
 //        }
     }
 
-    fun onPause(){
+    fun onPause() {
         if (supportedAccSensor) {
             mSensorMgr!!.unregisterListener(this, accSensor)
         }
@@ -98,7 +98,10 @@ open class ShakeListener(mContext: Context) : SensorEventListener {
                 mShakeTimestamp = now
                 mShakeCount++
 
-                mListener!!.onShake(mShakeCount)
+                if (shakeToStartAction <= mShakeCount) {
+                    mListener!!.onShake()
+                    mShakeCount = 0
+                }
             }
         }
     }
