@@ -30,12 +30,11 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
   static const stream = EventChannel("com.payfazz.Fazzcard/shakeDebug");
+  StreamSubscription subscription = null;
 
   @override
   void initState() {
-    stream.receiveBroadcastStream().listen(_onEvent, onError: () {
-      print('Error');
-    });
+    subscription = stream.receiveBroadcastStream().listen(_onEvent);
     super.initState();
   }
 
@@ -50,6 +49,12 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       _counter++;
     });
+  }
+
+  @override
+  void dispose() {
+    subscription.cancel();
+    super.dispose();
   }
 
   @override

@@ -6,24 +6,10 @@ import android.util.Log
 import io.flutter.app.FlutterActivity
 import io.flutter.plugins.GeneratedPluginRegistrant
 import io.flutter.plugin.common.EventChannel
+import io.reactivex.Observable
 
-class MainActivity: FlutterActivity(), ShakeListener.OnShakeListener {
+class MainActivity: FlutterActivity() {
   private val SHAKE_CHANNEL = "com.payfazz.Fazzcard/shakeDebug"
-  
-  override fun onShake() {
-    Log.d("MainActivity", "Shake shake shake!")
-    EventChannel(flutterView, SHAKE_CHANNEL).setStreamHandler(
-                  object : EventChannel.StreamHandler {
-                    override fun onListen(args: Any, events: EventChannel.EventSink) {
-                      events.success(1)
-                    }
-                    override fun onCancel(args: Any) {
-                      Log.d("MainActivity", "cancel")
-                      }
-                  }
-          )
-
-  }
 
   lateinit var shakeListener: ShakeListener
 
@@ -32,7 +18,23 @@ class MainActivity: FlutterActivity(), ShakeListener.OnShakeListener {
     GeneratedPluginRegistrant.registerWith(this)
 
     shakeListener = ShakeListener(this)
-    shakeListener.setOnShakeListener(this)
+
+    EventChannel(flutterView, SHAKE_CHANNEL).setStreamHandler(
+            object : EventChannel.StreamHandler {
+              override fun onListen(p0: Any?, p1: EventChannel.EventSink?) {
+                shakeListener.setOnShakeListener(object : ShakeListener.OnShakeListener {
+                  override fun onShake() {
+                    p1?.success("Shake!")
+                    Log.d("MainActivity", "Shake!")
+                  }
+                })
+              }
+
+              override fun onCancel(p0: Any?) {
+                Log.d("MainActivity", "Canceling")
+              }
+            }
+    )
   }
 
   override fun onResume() {
