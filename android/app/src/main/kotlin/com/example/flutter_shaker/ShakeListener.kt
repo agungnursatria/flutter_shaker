@@ -5,7 +5,7 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
-
+import android.util.Log
 
 
 open class ShakeListener(mContext: Context) : SensorEventListener {
@@ -22,7 +22,7 @@ open class ShakeListener(mContext: Context) : SensorEventListener {
     var magnetSensor: Sensor? = null
 
     var supportedAccSensor = false
-    var supportedMagnetSensor = false
+//    var supportedMagnetSensor = false
 
     init {
         mSensorMgr = mContext.getSystemService(Context.SENSOR_SERVICE) as SensorManager
@@ -48,11 +48,11 @@ open class ShakeListener(mContext: Context) : SensorEventListener {
             throw UnsupportedOperationException("Accelerometer not supported")
         }
 
-        supportedMagnetSensor = mSensorMgr!!.registerListener(this, magnetSensor, SensorManager.SENSOR_DELAY_GAME)
-        if (!supportedMagnetSensor) {
-            mSensorMgr!!.unregisterListener(this, magnetSensor)
-            throw UnsupportedOperationException("Magnetic Field not supported")
-        }
+//        supportedMagnetSensor = mSensorMgr!!.registerListener(this, magnetSensor, SensorManager.SENSOR_DELAY_GAME)
+//        if (!supportedMagnetSensor) {
+//            mSensorMgr!!.unregisterListener(this, magnetSensor)
+//            throw UnsupportedOperationException("Magnetic Field not supported")
+//        }
     }
 
     fun onPause(){
@@ -60,14 +60,13 @@ open class ShakeListener(mContext: Context) : SensorEventListener {
             mSensorMgr!!.unregisterListener(this, accSensor)
         }
 
-        if (supportedMagnetSensor) {
-            mSensorMgr!!.unregisterListener(this, magnetSensor)
-        }
+//        if (supportedMagnetSensor) {
+//            mSensorMgr!!.unregisterListener(this, magnetSensor)
+//        }
     }
 
 
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun onSensorChanged(event: SensorEvent?) {
