@@ -6,7 +6,6 @@ import android.util.Log
 import io.flutter.app.FlutterActivity
 import io.flutter.plugins.GeneratedPluginRegistrant
 import io.flutter.plugin.common.EventChannel
-import io.reactivex.Observable
 
 class MainActivity: FlutterActivity() {
   private val SHAKE_CHANNEL = "com.payfazz.Fazzcard/shakeDebug"
