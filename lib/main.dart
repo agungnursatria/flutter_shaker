@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 void main() => runApp(MyApp());
 
@@ -26,6 +29,22 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
+  static const stream = EventChannel("com.payfazz.Fazzcard/shakeDebug");
+
+  @override
+  void initState() {
+    stream.receiveBroadcastStream().listen(_onEvent, onError: () {
+      print('Error');
+    });
+    super.initState();
+  }
+
+  void _onEvent(Object event) {
+    print(event);
+    setState(() {
+      _counter = 99;
+    });
+  }
 
   void _incrementCounter() {
     setState(() {
